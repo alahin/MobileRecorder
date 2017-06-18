@@ -31,7 +31,6 @@
   <ion-item>
     <ion-label color="primary" floating>Name file</ion-label>
     <ion-input type="text" [(ngModel)]="nameFile" (ionInput)="runTimeChange($event)" name="title"></ion-input>
-    <ion-list 
   </ion-item>
   <button ion-button (click)="startRecording()" [disabled]="true">
     <span *ngIf="!recording">Grabar</span>
