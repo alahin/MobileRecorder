@@ -1,14 +1,52 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
-</ion-header>
+<!--<ion-content padding>
 
+  <button ion-button icon-left (click)="listenForSpeech();">
+    <ion-icon name="microphone"></ion-icon>
+    listen for speech
+  </button>
+
+  <button ion-button icon-left (click)="startRecording();">
+    <ion-icon name="microphone"></ion-icon>
+    Start recording
+  </button>
+
+  <button ion-button (click)="startRecording()">
+    Start recording
+  </button>
+  <button ion-button (click)="stopRecording()">
+    Stop recording
+  </button>
+       
+  <div *ngIf = "recorded">
+    <button ion-button (click)="playRecording()">
+      Start playback
+    </button>
+    <button ion-button (click)="stopRecordingPlay()">
+      Stop playback
+    </button>
+  </div>
+
+</ion-content>-->
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <ion-item>
+    <ion-label color="primary" floating>Name file</ion-label>
+    <ion-input type="text" [(ngModel)]="nameFile" (ionInput)="runTimeChange($event)" name="title"></ion-input>
+    <ion-list 
+  </ion-item>
+  <button ion-button (click)="startRecording()" [disabled]="true">
+    <span *ngIf="!recording">Grabar</span>
+    <span *ngIf="recording">Grabando</span> 
+  </button>
+  
+  <!--<button ion-button (click)="stopRecording()">
+    Stop recording
+  </button>
+  <div *ngIf = "!recording">
+    <button ion-button (click)="playRecording()">
+      Start playback
+    </button>
+    <button ion-button (click)="stopRecordingPlay()">
+      Stop playback
+    </button>
+  </div>-->
 </ion-content>
