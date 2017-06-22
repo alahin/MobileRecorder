@@ -8,6 +8,7 @@ import { SpeechRecognition } from '@ionic-native/speech-recognition';
 import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { MediaPlugin } from '@ionic-native/media';
 import { File } from '@ionic-native/file';
+import { NativeAudio } from '@ionic-native/native-audio';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -35,7 +36,8 @@ import { HomePage } from '../pages/home/home';
     SpeechRecognition,
     TextToSpeech,
     MediaPlugin,
-    File
+    File,
+    NativeAudio
   ]
 })
 export class AppModule {}

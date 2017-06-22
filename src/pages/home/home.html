@@ -1,51 +1,45 @@
-<!--<ion-content padding>
+<ion-header>
+    <ion-navbar>
+        <ion-item>
+          <ion-label color="primary" floating>Nombre</ion-label>
+          <ion-input type="submit" [(ngModel)]="nameFile"></ion-input>
+        </ion-item>
 
-  <button ion-button icon-left (click)="listenForSpeech();">
-    <ion-icon name="microphone"></ion-icon>
-    listen for speech
-  </button>
-
-  <button ion-button icon-left (click)="startRecording();">
-    <ion-icon name="microphone"></ion-icon>
-    Start recording
-  </button>
-
-  <button ion-button (click)="startRecording()">
-    Start recording
-  </button>
-  <button ion-button (click)="stopRecording()">
-    Stop recording
-  </button>
-       
-  <div *ngIf = "recorded">
-    <button ion-button (click)="playRecording()">
-      Start playback
-    </button>
-    <button ion-button (click)="stopRecordingPlay()">
-      Stop playback
-    </button>
-  </div>
-
-</ion-content>-->
+        <ion-item>
+          <ion-label>Extensión</ion-label>
+          <ion-select [(ngModel)]="selectedExtension">
+            <ion-option *ngFor="let i of extensions" [value]="i.value">{{i.display}}</ion-option>
+          </ion-select>
+        </ion-item>
+        
+        <div class="row">
+          <div class="col" text-center>
+            <button ion-button icon-left (click)="startRecording()">
+              <ion-icon name="microphone"></ion-icon>
+              <span *ngIf="!recording">Grabar</span>
+              <span *ngIf="recording">Grabando</span> 
+            </button>
+          </div>
+        </div>
+        
+    </ion-navbar>
+</ion-header>
 <ion-content padding>
-  <ion-item>
-    <ion-label color="primary" floating>Name file</ion-label>
-    <ion-input type="text" [(ngModel)]="nameFile" (ionInput)="runTimeChange($event)" name="title"></ion-input>
-  </ion-item>
-  <button ion-button (click)="startRecording()" [disabled]="true">
-    <span *ngIf="!recording">Grabar</span>
-    <span *ngIf="recording">Grabando</span> 
-  </button>
-  
-  <!--<button ion-button (click)="stopRecording()">
-    Stop recording
-  </button>
-  <div *ngIf = "!recording">
-    <button ion-button (click)="playRecording()">
-      Start playback
-    </button>
-    <button ion-button (click)="stopRecordingPlay()">
-      Stop playback
-    </button>
-  </div>-->
+
+  <ion-list>
+
+    <div class="row" *ngFor="let file of fileList" text-center>
+      <div class="col" text-left>
+        <ion-icon style="font-size:3rem;" (click)="playAudioRecorded($event, file)" ios="ios-play" md="md-play"></ion-icon>
+      </div>
+      <div class="col" text-left>
+        <ion-label style="font-size:2rem;" color="primary">{{file.name}}</ion-label>
+      </div>
+      <div class="col" text-right>
+        <ion-icon style="font-size:3rem;" (click)="deleteAudioRecorded($event, file)" ios="ios-trash" md="md-trash"></ion-icon>
+      </div>
+    </div>
+
+  </ion-list>
+
 </ion-content>

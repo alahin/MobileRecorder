@@ -1,25 +1,38 @@
 import { Component } from '@angular/core';
-import { SpeechRecognition } from '@ionic-native/speech-recognition';
-import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { MediaPlugin, MediaObject } from '@ionic-native/media';
-import { NavController, AlertController, Platform } from 'ionic-angular';
+import { NativeAudio } from '@ionic-native/native-audio';
+import { AlertController, Platform } from 'ionic-angular';
 import { File } from '@ionic-native/file';
-import 'rxjs/add/operator/toPromise';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
+
 export class HomePage {
   private mediaObject: MediaObject = null;
   public recording: boolean = false;
-  public nameFile: string = null;
+  public nameFile: string = "";
   public DIRECTORY_NAME: string = "Recordings";
-  public isButtonEnabled : boolean = false;
+  public selectedExtension : string = "";
+  public fileList : Array<any>;
 
-  constructor(private speechRecognition: SpeechRecognition, private tts: TextToSpeech,
-    public alertCtrl: AlertController, public navCtrl: NavController, public platform: Platform,
-    private file: File) {
+  public extensions = [
+    { display: 'mp3', value: '.mp3' },
+    { display: '3gp', value: '.3gp' },
+    { display: 'wav', value: '.wav' }
+  ];
+
+  constructor(public alertCtrl: AlertController, public platform: Platform,
+    private file: File, public nativeAudio: NativeAudio) {
+      
+  }
+
+  ionViewWillEnter(){
+    console.log("ionViewWillEnter");
+    this.platform.ready().then(() => {
+      this.obtainFileList();
+    });
   }
 
   get MediaPlugin(): MediaObject {
@@ -37,16 +50,7 @@ export class HomePage {
           console.log("error createDir::::", e);
         });
       
-      //obtiene la lista de archivos de audio en el directorio
-      // this.file.listDir(this.file.externalRootDirectory, this.DIRECTORY_NAME)
-      //   .then(result => {
-      //     console.log("result list::::", result);
-      //   })
-      //   .catch(e => {
-      //     console.log("error result list::::", e);
-      //   });
-      
-      this.mediaObject = mediaPlugin.create(this.file.externalRootDirectory+this.DIRECTORY_NAME+"/"+this.nameFile,
+      this.mediaObject = mediaPlugin.create(this.file.externalRootDirectory+this.DIRECTORY_NAME+"/"+this.nameFile+this.selectedExtension,
         function() {
             console.log("[mediaSuccess]");
         }, function(err) {
@@ -59,48 +63,34 @@ export class HomePage {
   }
  
   startRecording() {
-    if(!this.recording){
-      try {
-        console.log("startRecording this.mediaObject:: ", this.mediaObject);
-        this.MediaPlugin.startRecord();
-        this.recording = true;
+    if(this.nameFile != "" && this.selectedExtension != ""){
+      if(!this.recording){
+        try {
+          //Inicia una nueva grabación
+          this.MediaPlugin.startRecord();
+          this.recording = true;
+        }
+        catch(e){
+          this.showAlert('Exception this.MediaPlugin.startRecord(): '+ JSON.stringify(e));
+        }
       }
-      catch(e){
-        this.showAlert('Exception this.MediaPlugin.startRecord(): '+ JSON.stringify(e));
+      else{
+        try {
+          //Detiene la grabación
+          this.MediaPlugin.stopRecord();
+          this.mediaObject = null;
+          this.recording = false;
+          this.obtainFileList();
+        }
+        catch(e){
+          this.showAlert('Exception this.MediaPlugin.stopRecord(): '+ JSON.stringify(e));
+        }
       }
     }
     else{
-      try {
-        console.log("startRecording this.mediaObject:: ", this.mediaObject);
-        //Para la grabación
-        this.MediaPlugin.stopRecord();
-        this.mediaObject = null;
-        this.recording = false;
-      }
-      catch(e){
-        this.showAlert('Exception this.MediaPlugin.stopRecord(): '+ JSON.stringify(e));
-      }
+      this.showAlert("Inserta un nombre y una extensión para el fichero.");
     }
   }
- 
-  // playRecording() {
-  //   try {
-  //     this.MediaPlugin.play();
-  //   }
-  //   catch (e) {
-  //     this.showAlert('Error: '+ e);
-  //   }
-  // }
- 
-  // stopRecordingPlay() {
-  //   try {
-  //     this.MediaPlugin.stop();
-  //     this.MediaPlugin.release();
-  //   }
-  //   catch (e) {
-  //     this.showAlert('Error: '+ e);
-  //   }
-  // }
  
   showAlert(message) {
     let alert = this.alertCtrl.create({
@@ -110,60 +100,36 @@ export class HomePage {
     });
     alert.present();
   }
-  runTimeChange(searchTerm) {
-    console.log("searchTerm:: ", searchTerm);
+
+  /**
+   * Obtiene la lista de archivos de audio
+   */
+  obtainFileList(){
+    //obtiene la lista de archivos de audio en el directorio
+    this.file.listDir(this.file.externalRootDirectory, this.DIRECTORY_NAME)
+      .then(result => {
+        this.fileList = result;
+      })
+      .catch(e => {
+        console.log("error result list::::", e);
+      });
   }
-  test(){
-    console.log("eeeeeeeeeeeeee");
+
+  playAudioRecorded(event, item){
+    let pathOnly = item.nativeURL.substring(8);
+    let mediaPlugin = new MediaPlugin();
+    let fileAudio = mediaPlugin.create(pathOnly);
+    fileAudio.play();
   }
 
-
-  // listenForSpeech():void {
-  //   this.speechRecognition.startListening()
-  //     .subscribe(
-  //       (matches: Array<string>) => console.log(matches),
-  //       (onerror) => console.log('error:', onerror)
-  //   )
-  // }
-
-  // async getSupportedLanguages():Promise<Array<string>> {
-  //   try{
-  //     const languages = await this.speechRecognition.getSupportedLanguages();
-  //     console.log(languages);
-  //     return languages;
-  //   }
-  //   catch(e){
-  //     console.log(e);
-  //   }
-  // }
-
-  // async hasPermission():Promise<boolean> {
-  //   try{
-  //     const permission = await this.speechRecognition.hasPermission();
-  //     console.log(permission);
-  //     return permission;
-  //   }
-  //   catch(e){
-  //     console.log(e);
-  //   }
-  // }
-
-  // async getPermission():Promise<void> {
-  //   try{
-  //     const permission = await this.speechRecognition.requestPermission();
-  //     console.log(permission);
-  //   }
-  //   catch(e){
-  //     console.log(e);
-  //   }
-  // }
-
-  // async isSpeechSupported():Promise<boolean> {
-  //   const isAvailable = await this.speechRecognition.isRecognitionAvailable();
-  //   console.log(isAvailable);
-  //   return isAvailable;
-  // }
-
-
+  deleteAudioRecorded(event, item){
+    this.file.removeFile(this.file.externalRootDirectory+this.DIRECTORY_NAME, item.name)
+      .then(result => {
+        this.obtainFileList();
+      })
+      .catch(e => {
+        console.log("Error al eliminar el archivo::::", e);
+      });
+  }
 
 }
