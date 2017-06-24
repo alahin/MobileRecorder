@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { MediaPlugin, MediaObject } from '@ionic-native/media';
 import { NativeAudio } from '@ionic-native/native-audio';
-import { AlertController, Platform } from 'ionic-angular';
+import { AlertController, Platform, ModalController } from 'ionic-angular';
 import { File } from '@ionic-native/file';
+import { ModalAudioComponent } from '../../components/modal-audio/modal-audio';
 
 @Component({
   selector: 'page-home',
@@ -10,12 +11,15 @@ import { File } from '@ionic-native/file';
 })
 
 export class HomePage {
-  private mediaObject: MediaObject = null;
+  private recorderMedia: MediaObject = null;//Utilizada para startRecord y stopRecord
+  private audioMedia : MediaObject = null;//Utilizada para el play, pause y stop  
+  private mediaPlugin : MediaPlugin = null;
   public recording: boolean = false;
+  private DIRECTORY_NAME: string = "Recordings";
   public nameFile: string = "";
-  public DIRECTORY_NAME: string = "Recordings";
   public selectedExtension : string = "";
-  public fileList : Array<any>;
+  private fileList : Array<any>;
+  private PATH : string = this.file.externalRootDirectory+this.DIRECTORY_NAME+"/";
 
   public extensions = [
     { display: 'mp3', value: '.mp3' },
@@ -23,51 +27,32 @@ export class HomePage {
     { display: 'wav', value: '.wav' }
   ];
 
-  constructor(public alertCtrl: AlertController, public platform: Platform,
-    private file: File, public nativeAudio: NativeAudio) {
-      
+  constructor(private alertCtrl: AlertController, private platform: Platform,
+    private file: File, private nativeAudio: NativeAudio, private modalCtrl: ModalController) {
+      this.platform.ready().then(() => {
+        //crea el directorio si no existe
+        this.createDirectory();
+        //Inicializa el plugin
+        this.mediaPlugin = new MediaPlugin();
+      });
   }
 
-  ionViewWillEnter(){
-    console.log("ionViewWillEnter");
-    this.platform.ready().then(() => {
-      this.obtainFileList();
+  showAlert(message) {
+    let alert = this.alertCtrl.create({
+      title: 'Error',
+      subTitle: message,
+      buttons: ['OK']
     });
-  }
-
-  get MediaPlugin(): MediaObject {
-    console.log("get MediaPlugin this.mediaObject:: ", JSON.stringify(this.mediaObject));
-    if (this.mediaObject == null) {
-      console.log("this.mediaObject == null");
-      let mediaPlugin = new MediaPlugin();
-      
-      //crea el directorio si no existe
-      this.file.createDir(this.file.externalRootDirectory, this.DIRECTORY_NAME, false)
-        .then(result =>{
-          console.log("result createDir::::", result);
-        })
-        .catch(e => {
-          console.log("error createDir::::", e);
-        });
-      
-      this.mediaObject = mediaPlugin.create(this.file.externalRootDirectory+this.DIRECTORY_NAME+"/"+this.nameFile+this.selectedExtension,
-        function() {
-            console.log("[mediaSuccess]");
-        }, function(err) {
-            console.log("[mediaError]"+ JSON.stringify(err));
-        }, function(status) {
-            console.log("[mediaStatus]"+ JSON.stringify(status));
-        });
-    }
-    return this.mediaObject;
+    alert.present();
   }
  
-  startRecording() {
+  public startStopRecording() {
     if(this.nameFile != "" && this.selectedExtension != ""){
-      if(!this.recording){
+      if(this.recorderMedia == null && !this.recording){
         try {
           //Inicia una nueva grabación
-          this.MediaPlugin.startRecord();
+          this.recorderMedia = this.mediaPlugin.create(this.PATH+this.nameFile+this.selectedExtension);
+          this.recorderMedia.startRecord();
           this.recording = true;
         }
         catch(e){
@@ -77,8 +62,8 @@ export class HomePage {
       else{
         try {
           //Detiene la grabación
-          this.MediaPlugin.stopRecord();
-          this.mediaObject = null;
+          this.recorderMedia.stopRecord();
+          this.recorderMedia = null;
           this.recording = false;
           this.obtainFileList();
         }
@@ -91,20 +76,42 @@ export class HomePage {
       this.showAlert("Inserta un nombre y una extensión para el fichero.");
     }
   }
- 
-  showAlert(message) {
-    let alert = this.alertCtrl.create({
-      title: 'Error',
-      subTitle: message,
-      buttons: ['OK']
-    });
-    alert.present();
+
+  public play(event, item){
+    if(this.audioMedia == null)
+      this.audioMedia = this.mediaPlugin.create(item.nativeURL);
+    this.audioMedia.play();
+
+    let contactModal = this.modalCtrl.create(ModalAudioComponent);
+    contactModal.present();
+  }
+
+  public pause(event, item){
+    if(this.audioMedia != null)
+      this.audioMedia.pause();
+  }
+
+  public stop(event, item){
+    if(this.audioMedia != null){
+      this.audioMedia.stop();
+      this.audioMedia = null;
+    }
+  }
+
+  public delete(event, item){
+    this.file.removeFile(this.file.externalRootDirectory+this.DIRECTORY_NAME, item.name)
+      .then(result => {
+        this.obtainFileList();
+      })
+      .catch(e => {
+        console.log("Error al eliminar el archivo::::", e);
+      });
   }
 
   /**
    * Obtiene la lista de archivos de audio
    */
-  obtainFileList(){
+  private obtainFileList(){
     //obtiene la lista de archivos de audio en el directorio
     this.file.listDir(this.file.externalRootDirectory, this.DIRECTORY_NAME)
       .then(result => {
@@ -115,20 +122,34 @@ export class HomePage {
       });
   }
 
-  playAudioRecorded(event, item){
-    let pathOnly = item.nativeURL.substring(8);
-    let mediaPlugin = new MediaPlugin();
-    let fileAudio = mediaPlugin.create(pathOnly);
-    fileAudio.play();
-  }
-
-  deleteAudioRecorded(event, item){
-    this.file.removeFile(this.file.externalRootDirectory+this.DIRECTORY_NAME, item.name)
-      .then(result => {
-        this.obtainFileList();
+  /**
+   * Crea el directorio donde se guardarán 
+   * los ficheros de audio. Y si ya existe
+   * obtiene todos los ficheros de audio.
+   */
+  private createDirectory(){
+    this.file.checkDir(this.file.externalRootDirectory, this.DIRECTORY_NAME)
+      .then(success => {
+        if(!success){
+          this.file.createDir(this.file.externalRootDirectory, this.DIRECTORY_NAME, false)
+            .then(success =>{
+              if(success){
+                this.obtainFileList();
+              }
+              else{
+                this.showAlert("No se ha podido crear el directorio.");
+              }
+            })
+            .catch(e => {
+              this.showAlert("No se ha podido crear el directorio.");
+            });
+        }
+        else{
+          this.obtainFileList();
+        }
       })
       .catch(e => {
-        console.log("Error al eliminar el archivo::::", e);
+        this.showAlert("No se ha podido comprobar si existe el directorio.");
       });
   }
 

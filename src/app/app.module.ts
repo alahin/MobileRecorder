@@ -12,12 +12,14 @@ import { NativeAudio } from '@ionic-native/native-audio';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { ModalAudioComponent } from '../components/modal-audio/modal-audio';
 
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    ModalAudioComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +29,8 @@ import { HomePage } from '../pages/home/home';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    ModalAudioComponent
   ],
   providers: [
     StatusBar,

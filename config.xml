@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.zontisa.recognized" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>RecognizeVoice</name>
+    <name>Mobile Recorder</name>
     <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <author email="alahin66@hotmail.com" href="http://ionicframework.com/">@l@hindroid</author>
     <content original-src="index.html" src="http://192.168.1.109:8100" />
     <access origin="*" />
     <allow-navigation href="http://ionic.local/*" />

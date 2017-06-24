@@ -14,7 +14,7 @@
         
         <div class="row">
           <div class="col" text-center>
-            <button ion-button icon-left (click)="startRecording()">
+            <button ion-button icon-left (click)="startStopRecording()">
               <ion-icon name="microphone"></ion-icon>
               <span *ngIf="!recording">Grabar</span>
               <span *ngIf="recording">Grabando</span> 
@@ -30,13 +30,17 @@
 
     <div class="row" *ngFor="let file of fileList" text-center>
       <div class="col" text-left>
-        <ion-icon style="font-size:3rem;" (click)="playAudioRecorded($event, file)" ios="ios-play" md="md-play"></ion-icon>
-      </div>
-      <div class="col" text-left>
         <ion-label style="font-size:2rem;" color="primary">{{file.name}}</ion-label>
       </div>
+
+      <div class="col" text-center>
+        <ion-icon style="font-size:3rem; margin-right: 2rem;" (click)="play($event, file)" ios="ios-play" md="md-play"></ion-icon>
+        <!--<ion-icon style="font-size:3rem; margin-right: 2rem;" (click)="pause($event, file)" ios="ios-pause" md="md-pause"></ion-icon>
+        <ion-icon style="font-size:3rem; margin-right: 2rem;" (click)="stop($event, file)" ios="ios-square" md="md-square"></ion-icon>-->
+      </div>
+      
       <div class="col" text-right>
-        <ion-icon style="font-size:3rem;" (click)="deleteAudioRecorded($event, file)" ios="ios-trash" md="md-trash"></ion-icon>
+        <ion-icon style="font-size:3rem;" (click)="delete($event, file)" ios="ios-trash" md="md-trash"></ion-icon>
       </div>
     </div>
 
