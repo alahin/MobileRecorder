@@ -9,7 +9,7 @@ import { ModalAudioComponent } from '../../components/modal-audio/modal-audio';
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-
+dwadwadwadwa
 export class HomePage {
   private recorderMedia: MediaObject = null;//Utilizada para startRecord y stopRecord
   private audioMedia : MediaObject = null;//Utilizada para el play, pause y stop  
