@@ -9,7 +9,7 @@ import { ModalAudioComponent } from '../../components/modal-audio/modal-audio';
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-dwadwadwadwa
+
 export class HomePage {
   private recorderMedia: MediaObject = null;//Utilizada para startRecord y stopRecord
   private audioMedia : MediaObject = null;//Utilizada para el play, pause y stop  
@@ -80,10 +80,16 @@ export class HomePage {
   public play(event, item){
     if(this.audioMedia == null)
       this.audioMedia = this.mediaPlugin.create(item.nativeURL);
-    this.audioMedia.play();
 
-    let contactModal = this.modalCtrl.create(ModalAudioComponent);
-    contactModal.present();
+    let contactModal = this.modalCtrl.create(ModalAudioComponent, {mediaPlugin: this.mediaPlugin, audioMedia: this.audioMedia, item: item}, {enableBackdropDismiss: false});
+    contactModal.present()
+      .then(success => {
+        this.audioMedia = null;
+      })
+      .catch(e => {
+        console.log("Error al abrir la ventana modal::::", e);
+      });
+    
   }
 
   public pause(event, item){
