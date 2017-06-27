@@ -10,21 +10,25 @@
 </ion-header>
 <ion-content style="margin-top: 2rem;">
 
-    <ion-segment color="primary">
-        <ion-segment-button>
+    <ion-segment color="primary" style="margin-bottom: 2rem;">
+        <ion-segment-button value="play">
             <ion-icon style="font-size:5rem;" (click)="play()" ios="ios-play" md="md-play"></ion-icon>
         </ion-segment-button>
-        <ion-segment-button>
+        <ion-segment-button value="pause">
             <ion-icon style="font-size:5rem;" (click)="pause()" ios="ios-pause" md="md-pause"></ion-icon>
         </ion-segment-button>
-        <ion-segment-button>
+        <ion-segment-button value="stop">
             <ion-icon style="font-size:5rem;" (click)="stop()" ios="ios-square" md="md-square"></ion-icon>
         </ion-segment-button>
     </ion-segment>
 
-    <div class="row" text-center>
-        <div class="col" style="font-size:3rem;">
-            Time: {{audioTime}}
-        </div>
-    </div>
+    <ion-list>
+        <ion-item>
+            <ion-range (ionChange)="someFunction($event)" min="0" max="{{maxTime}}" [(ngModel)]="audioTime" color="primary" pin="true" debounce="700">
+                <ion-label range-left>{{minTime}}</ion-label>
+                <ion-label range-right>{{maxTime}}</ion-label>
+            </ion-range>
+        </ion-item>
+    </ion-list>
+
 </ion-content>
