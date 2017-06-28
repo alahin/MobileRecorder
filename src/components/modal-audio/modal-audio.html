@@ -24,9 +24,9 @@
 
     <ion-list>
         <ion-item>
-            <ion-range (ionChange)="someFunction($event)" min="0" max="{{maxTime}}" [(ngModel)]="audioTime" color="primary" pin="true" debounce="700">
-                <ion-label range-left>{{minTime}}</ion-label>
-                <ion-label range-right>{{maxTime}}</ion-label>
+            <ion-range (ionChange)="someFunction($event)" min="{{minTimeRange}}" max="{{maxTimeRange}}" [(ngModel)]="audioTime" color="primary" pin="true" debounce="700">
+                <ion-label range-left>{{actualTime | date: 'mm:ss' }}</ion-label>
+                <ion-label range-right>{{maxTime | date: 'mm:ss' }}</ion-label>
             </ion-range>
         </ion-item>
     </ion-list>
