@@ -13,13 +13,15 @@ import { NativeAudio } from '@ionic-native/native-audio';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ModalAudioComponent } from '../components/modal-audio/modal-audio';
+import { ModalRecorderComponent } from '../components/modal-recorder/modal-recorder';
 
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ModalAudioComponent
+    ModalAudioComponent,
+    ModalRecorderComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +32,8 @@ import { ModalAudioComponent } from '../components/modal-audio/modal-audio';
   entryComponents: [
     MyApp,
     HomePage,
-    ModalAudioComponent
+    ModalAudioComponent,
+    ModalRecorderComponent
   ],
   providers: [
     StatusBar,

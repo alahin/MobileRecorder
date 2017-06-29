@@ -1,6 +1,6 @@
 <ion-header>
     <ion-navbar primary>
-        <ion-title>{{item.name}}</ion-title>
+        <ion-title>{{nameFile}}</ion-title>
         <ion-buttons end>
             <button (click)="dismiss()">
                 <ion-icon name="close"></ion-icon>
@@ -14,21 +14,21 @@
         <ion-segment-button value="play">
             <ion-icon style="font-size:5rem;" (click)="play()" ios="ios-play" md="md-play"></ion-icon>
         </ion-segment-button>
-        <!--<ion-segment-button value="pause">
+        <ion-segment-button value="pause">
             <ion-icon style="font-size:5rem;" (click)="pause()" ios="ios-pause" md="md-pause"></ion-icon>
-        </ion-segment-button>-->
+        </ion-segment-button>
         <ion-segment-button value="stop">
             <ion-icon style="font-size:5rem;" (click)="stop()" ios="ios-square" md="md-square"></ion-icon>
         </ion-segment-button>
     </ion-segment>
 
-    <ion-list>
+    <!--<ion-list>
         <ion-item>
             <ion-range (ionChange)="someFunction($event)" min="{{minTimeRange}}" max="{{maxTimeRange}}" [(ngModel)]="audioTime" color="primary" pin="true" debounce="700">
                 <ion-label range-left>{{actualTime | date: 'mm:ss' }}</ion-label>
                 <ion-label range-right>{{maxTime | date: 'mm:ss' }}</ion-label>
             </ion-range>
         </ion-item>
-    </ion-list>
+    </ion-list>-->
 
 </ion-content>

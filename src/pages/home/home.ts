@@ -4,6 +4,7 @@ import { NativeAudio } from '@ionic-native/native-audio';
 import { AlertController, Platform, ModalController } from 'ionic-angular';
 import { File } from '@ionic-native/file';
 import { ModalAudioComponent } from '../../components/modal-audio/modal-audio';
+import { ModalRecorderComponent } from '../../components/modal-recorder/modal-recorder';
 
 @Component({
   selector: 'page-home',
@@ -50,6 +51,16 @@ export class HomePage {
     if(this.nameFile != "" && this.selectedExtension != ""){
       if(this.recorderMedia == null && !this.recording){
         try {
+
+          // let contactModal = this.modalCtrl.create(ModalRecorderComponent, {nameFile: this.nameFile}, {enableBackdropDismiss: false});
+          // contactModal.present()
+          //   .then(success => {
+          //     this.audioMedia = null;
+          //   })
+          //   .catch(e => {
+          //     console.log("Error al abrir la ventana modal::::", e);
+          //   });
+
           //Inicia una nueva grabación
           this.recorderMedia = this.mediaPlugin.create(this.PATH+this.nameFile+this.selectedExtension);
           this.recorderMedia.startRecord();
