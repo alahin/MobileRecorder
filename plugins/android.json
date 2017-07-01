@@ -1,0 +1,40 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.zontisa.recognized"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.zontisa.recognized"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.zontisa.recognized"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "com.zontisa.recognized"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.zontisa.recognized"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.zontisa.recognized"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.zontisa.recognized"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.zontisa.recognized"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.zontisa.recognized"
+        }
+    }
+}

@@ -11,6 +11,10 @@ log.txt
 *.sublime-workspace
 .vscode/
 npm-debug.log*
+*.exe
+*.bat
+*.apk
+proservice.keystore
 
 .idea/
 .sass-cache/
@@ -23,9 +27,6 @@ tmp/
 temp/
 hooks/
 platforms/
-plugins/
-plugins/android.json
-plugins/ios.json
 www/
 $RECYCLE.BIN/
 
