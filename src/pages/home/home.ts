@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MediaPlugin, MediaObject } from '@ionic-native/media';
-import { NativeAudio } from '@ionic-native/native-audio';
 import { AlertController, Platform, ModalController } from 'ionic-angular';
 import { File } from '@ionic-native/file';
 import { ModalAudioComponent } from '../../components/modal-audio/modal-audio';
@@ -11,11 +10,9 @@ import { ModalRecorderComponent } from '../../components/modal-recorder/modal-re
   templateUrl: 'home.html'
 })
 
-export class HomePage {
-  private recorderMedia: MediaObject = null;//Utilizada para startRecord y stopRecord
-  private audioMedia : MediaObject = null;//Utilizada para el play, pause y stop  
+export class HomePage { 
+  private audioMedia : MediaObject = null;//Utilizada para el play, pause y stop
   private mediaPlugin : MediaPlugin = null;
-  public recording: boolean = false;
   private DIRECTORY_NAME: string = "Recordings";
   public nameFile: string = "";
   public selectedExtension : string = "";
@@ -29,7 +26,7 @@ export class HomePage {
   ];
 
   constructor(private alertCtrl: AlertController, private platform: Platform,
-    private file: File, private nativeAudio: NativeAudio, private modalCtrl: ModalController) {
+    private file: File, private modalCtrl: ModalController) {
       this.platform.ready().then(() => {
         //crea el directorio si no existe
         this.createDirectory();
@@ -47,41 +44,14 @@ export class HomePage {
     alert.present();
   }
  
-  public startStopRecording() {
+  public startRecord() {
     if(this.nameFile != "" && this.selectedExtension != ""){
-      if(this.recorderMedia == null && !this.recording){
-        try {
-
-          // let contactModal = this.modalCtrl.create(ModalRecorderComponent, {nameFile: this.nameFile}, {enableBackdropDismiss: false});
-          // contactModal.present()
-          //   .then(success => {
-          //     this.audioMedia = null;
-          //   })
-          //   .catch(e => {
-          //     console.log("Error al abrir la ventana modal::::", e);
-          //   });
-
-          //Inicia una nueva grabación
-          this.recorderMedia = this.mediaPlugin.create(this.PATH+this.nameFile+this.selectedExtension);
-          this.recorderMedia.startRecord();
-          this.recording = true;
-        }
-        catch(e){
-          this.showAlert('Exception this.MediaPlugin.startRecord(): '+ JSON.stringify(e));
-        }
-      }
-      else{
-        try {
-          //Detiene la grabación
-          this.recorderMedia.stopRecord();
-          this.recorderMedia = null;
-          this.recording = false;
-          this.obtainFileList();
-        }
-        catch(e){
-          this.showAlert('Exception this.MediaPlugin.stopRecord(): '+ JSON.stringify(e));
-        }
-      }
+      let contactModal = this.modalCtrl.create(ModalRecorderComponent, {nameFile: this.nameFile, mediaPlugin: this.mediaPlugin, 
+        path: this.PATH, selectedExtension: this.selectedExtension}, {enableBackdropDismiss: false});
+      contactModal.onDidDismiss(data => {
+        this.obtainFileList();
+      });
+      contactModal.present();
     }
     else{
       this.showAlert("Inserta un nombre y una extensión para el fichero.");
@@ -103,19 +73,19 @@ export class HomePage {
     
   }
 
-  public pause(event, item){
-    if(this.audioMedia != null)
-      this.audioMedia.pause();
-  }
+  // public pause(event, item){
+  //   if(this.audioMedia != null)
+  //     this.audioMedia.pause();
+  // }
 
-  public stop(event, item){
-    if(this.audioMedia != null){
-      this.audioMedia.stop();
-      this.audioMedia = null;
-    }
-  }
+  // public stop(event, item){
+  //   if(this.audioMedia != null){
+  //     this.audioMedia.stop();
+  //     this.audioMedia = null;
+  //   }
+  // }
 
-  public delete(event, item){
+  public deleteFile(event, item){
     this.file.removeFile(this.file.externalRootDirectory+this.DIRECTORY_NAME, item.name)
       .then(result => {
         this.obtainFileList();

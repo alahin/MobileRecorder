@@ -3,7 +3,7 @@
         <ion-title>{{item.name}}</ion-title>
         <ion-buttons end>
             <button (click)="dismiss()">
-                <ion-icon name="close"></ion-icon>
+                <ion-icon style="font-size:3rem;" name="close"></ion-icon>
             </button>
         </ion-buttons>
     </ion-navbar>
@@ -11,20 +11,21 @@
 <ion-content style="margin-top: 2rem;">
 
     <ion-segment color="primary" style="margin-bottom: 2rem;">
-        <ion-segment-button value="play">
-            <ion-icon style="font-size:5rem;" (click)="play()" ios="ios-play" md="md-play"></ion-icon>
+        <ion-segment-button (click)="play()" value="play">
+            <ion-icon style="font-size:5rem;" ios="ios-play" md="md-play"></ion-icon>
         </ion-segment-button>
         <!--<ion-segment-button value="pause">
             <ion-icon style="font-size:5rem;" (click)="pause()" ios="ios-pause" md="md-pause"></ion-icon>
         </ion-segment-button>-->
-        <ion-segment-button value="stop">
-            <ion-icon style="font-size:5rem;" (click)="stop()" ios="ios-square" md="md-square"></ion-icon>
+        <ion-segment-button (click)="stop()" value="stop">
+            <ion-icon style="font-size:5rem;" ios="ios-square" md="md-square"></ion-icon>
         </ion-segment-button>
     </ion-segment>
 
+
     <ion-list>
         <ion-item>
-            <ion-range (ionChange)="someFunction($event)" min="{{minTimeRange}}" max="{{maxTimeRange}}" [(ngModel)]="audioTime" color="primary" pin="true" debounce="700">
+            <ion-range (ionChange)="someFunction($event)" min="{{minTimeRange}}" max="{{maxTimeRange}}" [(ngModel)]="audioTime" color="primary" pin="true">
                 <ion-label range-left>{{actualTime | date: 'mm:ss' }}</ion-label>
                 <ion-label range-right>{{maxTime | date: 'mm:ss' }}</ion-label>
             </ion-range>

@@ -14,10 +14,9 @@
         
         <div class="row">
           <div class="col" text-center>
-            <button ion-button icon-left (click)="startStopRecording()">
+            <button ion-button icon-left (click)="startRecord()">
               <ion-icon name="microphone"></ion-icon>
-              <span *ngIf="!recording">Grabar</span>
-              <span *ngIf="recording">Grabando</span> 
+              <span>Grabar</span>
             </button>
           </div>
         </div>
@@ -38,7 +37,7 @@
       </div>
       
       <div class="col" text-right>
-        <ion-icon style="font-size:3rem;" (click)="delete($event, file)" ios="ios-trash" md="md-trash"></ion-icon>
+        <ion-icon style="font-size:3rem;" (click)="deleteFile($event, file)" ios="ios-trash" md="md-trash"></ion-icon>
       </div>
     </div>
 

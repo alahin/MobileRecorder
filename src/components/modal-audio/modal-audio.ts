@@ -13,7 +13,7 @@ export class ModalAudioComponent {
   public audioTime: number = 0;
   private timeCurrentPosition: any;
   public actualTime: string;
-  public maxTime: any;
+  public maxTime: string;
   public minTimeRange: number;
   public maxTimeRange: number;
   private initialTime: number;
@@ -115,16 +115,13 @@ export class ModalAudioComponent {
     }, 100);
   }
 
-  
-
   dismiss() {
     this.audioMedia.stop();
     this.viewCtrl.dismiss();
     clearInterval(this.timeCurrentPosition);
   }
-  
+
   someFunction(e){
     console.log("event:::: ", e);
   }
-
 }

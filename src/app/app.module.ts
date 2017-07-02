@@ -14,6 +14,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ModalAudioComponent } from '../components/modal-audio/modal-audio';
 import { ModalRecorderComponent } from '../components/modal-recorder/modal-recorder';
+import { AudioToolsComponent } from '../components/audio-tools/audio-tools';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { ModalRecorderComponent } from '../components/modal-recorder/modal-recor
     MyApp,
     HomePage,
     ModalAudioComponent,
-    ModalRecorderComponent
+    ModalRecorderComponent,
+    AudioToolsComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,8 @@ import { ModalRecorderComponent } from '../components/modal-recorder/modal-recor
     MyApp,
     HomePage,
     ModalAudioComponent,
-    ModalRecorderComponent
+    ModalRecorderComponent,
+    AudioToolsComponent
   ],
   providers: [
     StatusBar,

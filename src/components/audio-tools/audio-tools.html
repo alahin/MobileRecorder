@@ -1,0 +1,19 @@
+<ion-segment color="primary" style="margin-bottom: 2rem;">
+	<ion-segment-button (click)="play()" value="play">
+		<ion-icon style="font-size:5rem;" ios="ios-play" md="md-play"></ion-icon>
+	</ion-segment-button>
+	<ion-segment-button (click)="pause()" value="pause">
+		<ion-icon style="font-size:5rem;" ios="ios-pause" md="md-pause"></ion-icon>
+	</ion-segment-button>
+	<ion-segment-button (click)="stop()" value="stop">
+		<ion-icon style="font-size:5rem;" ios="ios-square" md="md-square"></ion-icon>
+	</ion-segment-button>
+</ion-segment>
+<ion-list>
+	<ion-item>
+		<ion-range (ionChange)="someFunction($event)" min="{{minTimeRange}}" max="{{maxTimeRange}}" [(ngModel)]="audioTime" color="primary" pin="true" debounce="700">
+			<ion-label range-left>{{actualTime | date: 'mm:ss' }}</ion-label>
+			<ion-label range-right>{{maxTime | date: 'mm:ss' }}</ion-label>
+		</ion-range>
+	</ion-item>
+</ion-list>
