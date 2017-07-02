@@ -25,8 +25,10 @@ export class ModalAudioComponent {
       this.audioMedia = navParams.get("audioMedia");
       this.item = navParams.get("item");
       this.actualTime = new Date(0).toISOString();
-      this.getDuration();
-      this.initAudioTime();
+      this.platform.ready().then(() => {
+        this.getDuration();
+        this.initAudioTime();
+      });
   }
 
   public play(){
