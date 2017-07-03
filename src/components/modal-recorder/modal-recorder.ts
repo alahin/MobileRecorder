@@ -7,7 +7,7 @@ import { ViewController, NavParams, Platform } from 'ionic-angular';
     templateUrl: 'modal-recorder.html'
 })
 export class ModalRecorderComponent {
-  private media: MediaObject = null;//Utilizada para startRecord y stopRecord
+  private audioMedia: MediaObject = null;//Utilizada para startRecord y stopRecord
   private mediaPlugin : MediaPlugin = null;
   public recording: boolean = false;
   public nameFile: string;
@@ -29,13 +29,13 @@ export class ModalRecorderComponent {
   }
 
   public playRecord(){
-    if(this.media == null && !this.recording){
+    if(this.audioMedia == null && !this.recording){
       try {
         this.recording = true;
         this.stop = false;
         // Inicia una nueva grabación
-        this.media = this.mediaPlugin.create(this.PATH+this.nameFile+this.selectedExtension);
-        this.media.startRecord();
+        this.audioMedia = this.mediaPlugin.create(this.PATH+this.nameFile+this.selectedExtension);
+        this.audioMedia.startRecord();
         //Obtiene la fecha inicial
         this.initialTime = new Date().getTime();
         this.timeCurrentPosition = setInterval(() => {
@@ -51,11 +51,10 @@ export class ModalRecorderComponent {
     }
     else{
       try {
-        this.media.stopRecord();
+        this.audioMedia.stopRecord();
         clearInterval(this.timeCurrentPosition);
         this.recording = false;
         this.stop = true;
-        this.media = null;
       }
       catch(e){
         console.log('Exception this.MediaPlugin.stopRecord(): '+ JSON.stringify(e));

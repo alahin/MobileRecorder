@@ -19,13 +19,13 @@
             <ion-icon style="font-size:5rem;" ios="ios-download" md="md-download"></ion-icon>
         </ion-segment-button>
     </ion-segment>
-
+    
     <ion-list *ngIf="recording">
         <ion-item text-center>
-            <ion-label range-left>{{actualTime | date: 'mm:ss' }}</ion-label>
+            <ion-label range-left>{{actualTime | date: 'mm:ss'}}</ion-label>
         </ion-item>
     </ion-list>
 
-    <!--<audio-tools *ngIf="stop" [audioMedia]="audioMedia"></audio-tools>-->
+    <audio-tools *ngIf="stop" [audioMedia]="audioMedia"></audio-tools>
 
 </ion-content>

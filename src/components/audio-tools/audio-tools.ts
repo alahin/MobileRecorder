@@ -18,14 +18,10 @@ export class AudioToolsComponent {
 	public minTimeRange: number;
 	public maxTimeRange: number;
 	private initialTime: number;
-	private isPaused: boolean = false;
 
     constructor(private platform: Platform) {
 		this.actualTime = new Date(0).toISOString();
-		this.platform.ready().then(() => {
-			this.getDuration();
-			this.initAudioTime();
-        });
+		this.getDuration();
     }
 
 	public play(){
@@ -55,10 +51,6 @@ export class AudioToolsComponent {
 			//Obtiene la fecha inicial
 			this.initialTime = new Date().getTime();
 
-			if(this.isPaused){
-				this.isPaused = false;
-			}
-
 			this.timeCurrentPosition = setInterval(() => {
 				this.audioMedia.getCurrentPosition()
 					.then(time => {
@@ -70,15 +62,10 @@ export class AudioToolsComponent {
 						else{
 							//ngModel de la barra de tiempo
 							this.audioTime = Math.round(time);
-							if(!this.isPaused){
-								//Obtiene la fecha actual transcurrido 1 segundo
-								let actualTime = new Date().getTime();
-								//Obtiene la diferencia entre el inicial y el actual y este será el tiempo a mostrar
-								this.actualTime = new Date(actualTime - this.initialTime).toISOString();
-							}
-							else{
-								this.actualTime = new Date(this.actualTime + 1).toISOString();
-							}
+							//Obtiene la fecha actual transcurrido 1 segundo
+							let actualTime = new Date().getTime();
+							//Obtiene la diferencia entre el inicial y el actual y este será el tiempo a mostrar
+							this.actualTime = new Date(actualTime - this.initialTime).toISOString();
 						}
 					});
 			}, 1000);
@@ -86,7 +73,6 @@ export class AudioToolsComponent {
 	}
 
 	private pauseAudioTime(){
-		this.isPaused = true;
 		this.audioMedia.pause();
 		clearInterval(this.timeCurrentPosition);
 		this.isPlaying = false;
@@ -108,7 +94,10 @@ export class AudioToolsComponent {
 	private getDuration(){
 		this.minTimeRange = 0;
 		let time = setInterval(() => {
+			// console.log("this.audioMedia.getDuration():::::: ", this.audioMedia.getDuration());
 			this.maxTime = new Date(Math.round(this.audioMedia.getDuration())).toISOString();
+			// console.log("this.maxTime:::::: ", this.maxTime);
+			// console.log("new Date(0):::::: ", new Date(0));
 			this.maxTimeRange = Math.round(this.audioMedia.getDuration());
 			clearInterval(time);
 		}, 100);

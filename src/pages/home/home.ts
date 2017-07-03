@@ -58,7 +58,7 @@ export class HomePage {
     }
   }
 
-  public play(event, item){
+  public play(item){
     if(this.audioMedia == null)
       this.audioMedia = this.mediaPlugin.create(item.nativeURL);
 
@@ -73,19 +73,7 @@ export class HomePage {
     
   }
 
-  // public pause(event, item){
-  //   if(this.audioMedia != null)
-  //     this.audioMedia.pause();
-  // }
-
-  // public stop(event, item){
-  //   if(this.audioMedia != null){
-  //     this.audioMedia.stop();
-  //     this.audioMedia = null;
-  //   }
-  // }
-
-  public deleteFile(event, item){
+  public deleteFile(item){
     this.file.removeFile(this.file.externalRootDirectory+this.DIRECTORY_NAME, item.name)
       .then(result => {
         this.obtainFileList();
