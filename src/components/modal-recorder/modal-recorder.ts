@@ -29,7 +29,7 @@ export class ModalRecorderComponent {
   }
 
   public playRecord(){
-    if(this.audioMedia == null && !this.recording){
+    if(!this.recording){
       try {
         this.recording = true;
         this.stop = false;

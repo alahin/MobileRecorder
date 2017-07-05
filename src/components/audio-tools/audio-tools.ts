@@ -7,16 +7,15 @@ import { Platform } from 'ionic-angular';
     templateUrl: 'audio-tools.html'
 })
 export class AudioToolsComponent {
-    @Input()
-	audioMedia : MediaObject;//Utilizada para el play, pause y stop
-	
+    @Input() audioMedia: MediaObject;//Utilizada para el play, pause y stop
+	@Input() maxTime: any;
+	@Input() minTimeRange: number;
+	@Input() maxTimeRange: number;
+
 	private isPlaying: boolean = false;
 	public audioTime: number = 0;
 	private timeCurrentPosition: any;
 	public actualTime: string;
-	public maxTime: any;
-	public minTimeRange: number;
-	public maxTimeRange: number;
 	private initialTime: number;
 
     constructor(private platform: Platform) {
@@ -26,10 +25,6 @@ export class AudioToolsComponent {
 
 	public play(){
 		this.initAudioTime();
-	}
-
-	public pause(){
-		this.pauseAudioTime();
 	}
 
 	public stop(){
@@ -45,7 +40,7 @@ export class AudioToolsComponent {
 	 * del audio.
 	 */
 	private initAudioTime(){
-		if(!this.isPlaying){
+		if(!this.isPlaying){			
 			this.isPlaying = true;
 			this.audioMedia.play();
 			//Obtiene la fecha inicial
@@ -72,12 +67,6 @@ export class AudioToolsComponent {
 		}
 	}
 
-	private pauseAudioTime(){
-		this.audioMedia.pause();
-		clearInterval(this.timeCurrentPosition);
-		this.isPlaying = false;
-	}
-
 	private stopAudioTime(){
 		this.audioMedia.stop();
 		this.isPlaying = false;
@@ -94,13 +83,11 @@ export class AudioToolsComponent {
 	private getDuration(){
 		this.minTimeRange = 0;
 		let time = setInterval(() => {
-			// console.log("this.audioMedia.getDuration():::::: ", this.audioMedia.getDuration());
-			this.maxTime = new Date(Math.round(this.audioMedia.getDuration())).toISOString();
-			// console.log("this.maxTime:::::: ", this.maxTime);
-			// console.log("new Date(0):::::: ", new Date(0));
-			this.maxTimeRange = Math.round(this.audioMedia.getDuration());
+			let duration = Math.round(this.audioMedia.getDuration());
+			this.maxTime = new Date(duration).toISOString();
+			this.maxTimeRange = Math.round(duration);
 			clearInterval(time);
-		}, 100);
+		}, 3000);
 	}
 
 }
