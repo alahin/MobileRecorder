@@ -4,6 +4,7 @@ import { AlertController, Platform, ModalController } from 'ionic-angular';
 import { File } from '@ionic-native/file';
 import { ModalAudioComponent } from '../../components/modal-audio/modal-audio';
 import { ModalRecorderComponent } from '../../components/modal-recorder/modal-recorder';
+import { SpeechRecognition } from 'ionic-native';
 
 @Component({
   selector: 'page-home',
@@ -32,6 +33,33 @@ export class HomePage {
         this.createDirectory();
         //Inicializa el plugin
         this.mediaPlugin = new MediaPlugin();
+
+        // SpeechRecognition.isRecognitionAvailable()
+        //   .then(available => {
+        //       console.log(available);
+        //   });
+        // let options = {
+        //   language: "eu-ES" ,
+        //   matches: 5,
+        //   prompt: "",        // Android only
+        //   showPopup: false,  // Android only
+        //   showPartial: false // iOS only
+        // }
+        // let options = {};
+        // // Start the recognition process
+        // SpeechRecognition.startListening(options)
+        //   .subscribe(
+        //     (matches: Array<string>) => {
+        //       console.log(matches);
+        //     },
+        //     (onerror) => {
+        //       console.log('error:', onerror);
+        //     }
+        //   )
+
+        // // Stop the recognition process (iOS only)
+        // SpeechRecognition.stopListening();
+         
       });
   }
  
@@ -137,4 +165,5 @@ export class HomePage {
     });
     alert.present();
   }
+
 }

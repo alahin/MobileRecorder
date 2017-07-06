@@ -30,6 +30,9 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.zontisa.recognized"
+        },
+        "cordova-plugin-speechrecognition": {
+            "PACKAGE_NAME": "com.zontisa.recognized"
         }
     },
     "dependent_plugins": {
