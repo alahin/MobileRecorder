@@ -1,14 +1,14 @@
 import { Component, Renderer } from '@angular/core';
 import { MediaObject, MediaPlugin } from '@ionic-native/media';
-import { ViewController, NavParams, Platform } from 'ionic-angular';
+import { ViewController, NavParams, Events } from 'ionic-angular';
 
 @Component({
     selector: 'modal-recorder',
     templateUrl: 'modal-recorder.html'
 })
 export class ModalRecorderComponent {
-  private audioMedia: MediaObject = null;//Utilizada para startRecord y stopRecord
-  private mediaPlugin : MediaPlugin = null;
+  public audioMedia: MediaObject = null;//Utilizada para startRecord y stopRecord
+  private mediaPlugin : MediaPlugin;
   public recording: boolean = false;
   public nameFile: string;
   private PATH: string;
@@ -16,10 +16,10 @@ export class ModalRecorderComponent {
   private initialTime: number;
   private timeCurrentPosition: any;
   public actualTime: string;
-  public stop: boolean = false;
+  public stopping: boolean = false;
 
   constructor(public viewCtrl: ViewController, private navParams: NavParams,
-    public renderer: Renderer, private platform: Platform) {
+    public renderer: Renderer, private events: Events) {
       this.renderer.setElementClass(viewCtrl.pageRef().nativeElement, 'my-popup', true);
       this.nameFile = navParams.get("nameFile");
       this.mediaPlugin = navParams.get("mediaPlugin");
@@ -32,7 +32,7 @@ export class ModalRecorderComponent {
     if(!this.recording){
       try {
         this.recording = true;
-        this.stop = false;
+        this.stopping = false;
         // Inicia una nueva grabación
         this.audioMedia = this.mediaPlugin.create(this.PATH+this.nameFile+this.selectedExtension);
         this.audioMedia.startRecord();
@@ -54,16 +54,18 @@ export class ModalRecorderComponent {
         this.audioMedia.stopRecord();
         clearInterval(this.timeCurrentPosition);
         this.recording = false;
-        this.stop = true;
+        this.stopping = true;
+        this.actualTime = new Date(0).toISOString();
       }
       catch(e){
         console.log('Exception this.MediaPlugin.stopRecord(): '+ JSON.stringify(e));
       }
     }
   }
-  
+
   dismiss() {
     this.viewCtrl.dismiss();
+    this.events.publish('stopAudioTime');
   }
 
 }

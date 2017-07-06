@@ -15,9 +15,6 @@
             <ion-icon style="font-size:5rem;" *ngIf="!recording" ios="ios-mic" md="md-mic"></ion-icon>
             <ion-icon style="font-size:5rem;" *ngIf="recording" ios="ios-mic-off" md="md-mic-off"></ion-icon>
         </ion-segment-button>
-        <!--<ion-segment-button *ngIf="stop" value="download" (click)="dismiss()">
-            <ion-icon style="font-size:5rem;" ios="ios-download" md="md-download"></ion-icon>
-        </ion-segment-button>-->
     </ion-segment>
     
     <ion-list *ngIf="recording">
@@ -26,6 +23,6 @@
         </ion-item>
     </ion-list>
 
-    <audio-tools *ngIf="stop" [audioMedia]="audioMedia"></audio-tools>
+    <audio-tools *ngIf="stopping" [audioMedia]="audioMedia"></audio-tools>
 
 </ion-content>

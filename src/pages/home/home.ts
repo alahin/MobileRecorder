@@ -34,23 +34,19 @@ export class HomePage {
         this.mediaPlugin = new MediaPlugin();
       });
   }
-
-  showAlert(message) {
-    let alert = this.alertCtrl.create({
-      title: 'Error',
-      subTitle: message,
-      buttons: ['OK']
-    });
-    alert.present();
-  }
  
   public startRecord() {
     if(this.nameFile != "" && this.selectedExtension != ""){
+      //Abre la ventana modal para grabar el audio
       let contactModal = this.modalCtrl.create(ModalRecorderComponent, {nameFile: this.nameFile, mediaPlugin: this.mediaPlugin, 
         path: this.PATH, selectedExtension: this.selectedExtension}, {enableBackdropDismiss: false});
+      
+      //Se ejecuta al cerrar la ventana modal
       contactModal.onDidDismiss(data => {
+        this.audioMedia = null;
         this.obtainFileList();
       });
+      
       contactModal.present();
     }
     else{
@@ -58,21 +54,26 @@ export class HomePage {
     }
   }
 
-  public play(item){
-    if(this.audioMedia == null)
-      this.audioMedia = this.mediaPlugin.create(item.nativeURL);
+  public selectFile(item){
+    //Abre el archivo seleccionado
+    this.audioMedia = this.mediaPlugin.create(item.nativeURL);
 
-    let contactModal = this.modalCtrl.create(ModalAudioComponent, {mediaPlugin: this.mediaPlugin, audioMedia: this.audioMedia, item: item}, {enableBackdropDismiss: false});
-    contactModal.present()
-      .then(success => {
-        this.audioMedia = null;
-      })
-      .catch(e => {
-        console.log("Error al abrir la ventana modal::::", e);
-      });
+    //Abre la ventana modal para escuchar el audio
+    let contactModal = this.modalCtrl.create(ModalAudioComponent, {audioMedia: this.audioMedia, item: item}, 
+      {enableBackdropDismiss: false});
     
+    //Se ejecuta al cerrar la ventana modal
+    contactModal.onDidDismiss(data => {
+      this.audioMedia = null;
+    });
+
+    contactModal.present();
   }
 
+  /**
+   * Elimina el archivo seleccionado
+   * @param item
+   */
   public deleteFile(item){
     this.file.removeFile(this.file.externalRootDirectory+this.DIRECTORY_NAME, item.name)
       .then(result => {
@@ -128,4 +129,12 @@ export class HomePage {
       });
   }
 
+  showAlert(message) {
+    let alert = this.alertCtrl.create({
+      title: 'Error',
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
 }
